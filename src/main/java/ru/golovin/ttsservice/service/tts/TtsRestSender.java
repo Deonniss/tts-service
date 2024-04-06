@@ -1,8 +1,8 @@
 package ru.golovin.ttsservice.service.tts;
 
-import ru.golovin.ttsservice.entity.SoundFile;
+import ru.golovin.ttsservice.dto.SoundDto;
 
 public interface TtsRestSender {
 
-    SoundFile executeRequest(String text);
+    SoundDto executeRequest(String text);
 }

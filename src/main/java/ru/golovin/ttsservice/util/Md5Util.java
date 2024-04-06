@@ -2,11 +2,17 @@ package ru.golovin.ttsservice.util;
 
 import lombok.SneakyThrows;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 public final class Md5Util {
 
     private Md5Util() {
+    }
+
+    @SneakyThrows
+    public static String calculateMD5(String text) {
+        return calculateMD5(text.getBytes(StandardCharsets.UTF_8));
     }
 
     @SneakyThrows

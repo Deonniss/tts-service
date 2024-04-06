@@ -8,6 +8,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @SpringBootApplication
 public class TtsServiceApplication {
 
@@ -30,6 +33,13 @@ public class TtsServiceApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
+    }
+
+    //private final ExecutorService executorService = Executors.newFixedThreadPool()
+
+    @Bean
+    public ExecutorService ttsExecutorService() {
+        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
 }

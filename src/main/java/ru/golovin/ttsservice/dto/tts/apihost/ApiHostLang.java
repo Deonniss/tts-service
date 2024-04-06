@@ -1,4 +1,4 @@
-package ru.golovin.ttsservice.dto.apihost;
+package ru.golovin.ttsservice.dto.tts.apihost;
 
 public enum ApiHostLang {
     RU("ru-RU");

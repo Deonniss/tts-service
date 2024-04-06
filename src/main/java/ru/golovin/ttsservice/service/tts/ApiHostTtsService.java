@@ -9,10 +9,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.golovin.ttsservice.dto.apihost.ApiHostTtsData;
-import ru.golovin.ttsservice.dto.apihost.ApiHostTtsRequest;
-import ru.golovin.ttsservice.dto.apihost.ApiHostTtsResponse;
-import ru.golovin.ttsservice.entity.SoundFile;
+import ru.golovin.ttsservice.dto.SoundDto;
+import ru.golovin.ttsservice.dto.tts.apihost.ApiHostTtsData;
+import ru.golovin.ttsservice.dto.tts.apihost.ApiHostTtsRequest;
+import ru.golovin.ttsservice.dto.tts.apihost.ApiHostTtsResponse;
+import ru.golovin.ttsservice.util.Md5Util;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ApiHostTtsService implements TtsRestSender {
     private String apiHostUrl;
 
     @SneakyThrows
-    public SoundFile executeRequest(String text) {
+    public SoundDto executeRequest(String text) {
         ApiHostTtsRequest request = new ApiHostTtsRequest();
         ApiHostTtsData data = new ApiHostTtsData();
         data.setLang("ru-RU");
@@ -44,6 +45,9 @@ public class ApiHostTtsService implements TtsRestSender {
         HttpEntity<String> requestEntity = new HttpEntity<>(gson.toJson(request), applicationJsonHeaders);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(apiHostUrl, requestEntity, String.class);
         ApiHostTtsResponse apiHostTtsResponse = gson.fromJson(responseEntity.getBody(), ApiHostTtsResponse.class);
-        return downloadService.download(apiHostTtsResponse.getAudio());
+        SoundDto sound = downloadService.download(apiHostTtsResponse.getAudio());
+        sound.setText(text);
+        sound.setTextMd5(Md5Util.calculateMD5(text));
+        return sound;
     }
 }

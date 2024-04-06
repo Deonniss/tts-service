@@ -1,8 +1,8 @@
-package ru.golovin.ttsservice.dto.apihost;
+package ru.golovin.ttsservice.dto.tts.apihost;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import ru.golovin.ttsservice.dto.Request;
+import ru.golovin.ttsservice.dto.tts.Request;
 
 import java.util.List;
 

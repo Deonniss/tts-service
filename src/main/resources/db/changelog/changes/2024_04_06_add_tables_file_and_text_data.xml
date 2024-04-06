@@ -14,10 +14,10 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints unique="true" nullable="false" primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(32)">
+            <column name="name" type="varchar(40)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="md5" type="varchar(16)">
+            <column name="md5" type="varchar(32)">
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="url" type="varchar(128)">
@@ -41,7 +41,7 @@
             <column name="text" type="varchar(512)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="md5" type="varchar(16)">
+            <column name="md5" type="varchar(32)">
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="sound_file_id" type="bigint">

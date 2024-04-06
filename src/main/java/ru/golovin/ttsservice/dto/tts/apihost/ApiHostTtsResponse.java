@@ -1,7 +1,7 @@
-package ru.golovin.ttsservice.dto.apihost;
+package ru.golovin.ttsservice.dto.tts.apihost;
 
 import lombok.Data;
-import ru.golovin.ttsservice.dto.Response;
+import ru.golovin.ttsservice.dto.tts.Response;
 
 @Data
 public class ApiHostTtsResponse implements Response {

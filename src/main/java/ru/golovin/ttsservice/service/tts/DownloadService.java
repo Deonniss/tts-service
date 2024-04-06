@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.golovin.ttsservice.entity.SoundFile;
+import ru.golovin.ttsservice.dto.SoundDto;
 import ru.golovin.ttsservice.util.Md5Util;
 
 import java.io.FileOutputStream;
@@ -25,10 +25,10 @@ public class DownloadService {
     private String fileStorage;
 
     @SneakyThrows
-    public SoundFile download(String url) {
+    public SoundDto download(String url) {
         ResponseEntity<byte[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, byte[].class);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            SoundFile soundFile = new SoundFile();
+            SoundDto sound = new SoundDto();
             byte[] data = responseEntity.getBody();
             if (data == null) {
                 throw new NullPointerException();
@@ -39,10 +39,10 @@ public class DownloadService {
             try (OutputStream outputStream = new FileOutputStream(downloadPath)) {
                 outputStream.write(data);
             }
-            soundFile.setMd5(md5);
-            soundFile.setUrl(downloadPath);
-            soundFile.setName(name);
-            return soundFile;
+            sound.setFileMd5(md5);
+            sound.setFileUrl(downloadPath);
+            sound.setFileName(name);
+            return sound;
         } else {
             throw new BadRequestException();
         }
