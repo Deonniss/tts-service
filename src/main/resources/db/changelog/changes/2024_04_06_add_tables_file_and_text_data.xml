@@ -1,0 +1,112 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2024_04_06_add_tables_file_and_text_data-1" author="golovin">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="sound_file"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="sound_file">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(32)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="md5" type="varchar(16)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="url" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2024_04_06_add_tables_file_and_text_data-2" author="golovin">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="text_data"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="text_data">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="text" type="varchar(512)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="md5" type="varchar(16)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="sound_file_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="2024_04_06_add_tables_file_and_text_data-3" author="golovin">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="text_data"
+                                            foreignKeyName="fk_text_data_sound_file_id"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint constraintName="fk_text_data_sound_file_id"
+                                 baseTableName="text_data"
+                                 baseColumnNames="sound_file_id"
+                                 referencedTableName="sound_file"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="2024_04_06_add_tables_file_and_text_data-4" author="golovin">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_indexes
+                WHERE indexname = 'text_data_text_idx'
+            </sqlCheck>
+        </preConditions>
+        <comment>add index text_data_text_idx - text</comment>
+        <createIndex indexName="text_data_text_idx" tableName="text_data">
+            <column name="text"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="2024_04_06_add_tables_file_and_text_data-5" author="golovin">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_indexes
+                WHERE indexname = 'text_data_md5_idx'
+            </sqlCheck>
+        </preConditions>
+        <comment>add index text_data_md5_idx - md5</comment>
+        <createIndex indexName="text_data_md5_idx" tableName="text_data">
+            <column name="md5"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="2024_04_06_add_tables_file_and_text_data-6" author="golovin">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_indexes
+                WHERE indexname = 'sound_file_md5_idx'
+            </sqlCheck>
+        </preConditions>
+        <comment>add index sound_file_md5_idx - md5</comment>
+        <createIndex indexName="sound_file_md5_idx" tableName="sound_file">
+            <column name="md5"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
